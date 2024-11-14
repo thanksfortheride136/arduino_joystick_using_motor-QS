@@ -15,23 +15,38 @@ Brown -> GND
 Yellow -> Digital Pin
 */
 
+#include <Servo.h>
+
+Servo servo1;
+
+const int vrx_pin = A0;   //defines each directions pins
+const int vry_pin = A1;
+int motorPin = 7;
+
+int xValue = 0;   //stores x and y vals
+int yValue = 0;
+
+
+
 void setup() {
   // put your setup code here, to run once:
+  
   Serial.begin(9600);
   servo1.attach(motorPin);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  moveMotor();
+  controlServo();
   readJoyValue();
+  xValue = analogRead(vrx_pin); //reads the value from the analog pin
+  yValue = analogRead(vry_pin);
+  // put your main code here, to run repeatedly:
+  
   
   
 }
 
 void readJoyValue(){
-  xValue = analogRead(vrx_pin); //reads the value from the analog pin
-  yValue = analogRead(vry_pin);
   Serial.print("x = ");
   Serial.print(xValue);
   Serial.print(", y = ");
@@ -39,7 +54,7 @@ void readJoyValue(){
   delay(100);  // Add a small delay to make the output more readable
 }
 
-void moveMotor(){
+void controlServo(){
   if(xValue < 400){
     servo1.write(0);
   }else if(xValue > 600){
