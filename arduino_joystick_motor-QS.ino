@@ -15,39 +15,36 @@ Brown -> GND
 Yellow -> Digital Pin
 */
 
-#include <Arduino.h>
-#include <Servo.h>
-
-int xValue = analogRead(A5);
-int yValue = analogRead(A4);
-int x_pin = A4;
-int y_pin = A5;
-int motorPin = 13;
-
-Servo motor1;
-
 void setup() {
+  // put your setup code here, to run once:
   Serial.begin(9600);
-  motor1.attach(motorPin);
+  servo1.attach(motorPin);
 }
 
 void loop() {
-  // read analog X and Y analog values
-  xValue = analogRead(x_pin);
-  yValue = analogRead(y_pin);
-  //motor1.write(90);
-  // print data to Serial Monitor on Arduino IDE, can do many other things!
-  //Serial.print("x = ");
-  //Serial.print(xValue);
-  //Serial.print(", y = ");
-  //Serial.println(yValue);
-  if(xValue > 1020){
-    motor1.write(160);
-  }else if(xValue < 1){
-    motor1.write(20);
-  }else{
-    motor1.write(95);
-  }
-  //turnMotor();
+  // put your main code here, to run repeatedly:
+  moveMotor();
+  readJoyValue();
+  
+  
 }
 
+void readJoyValue(){
+  xValue = analogRead(vrx_pin); //reads the value from the analog pin
+  yValue = analogRead(vry_pin);
+  Serial.print("x = ");
+  Serial.print(xValue);
+  Serial.print(", y = ");
+  Serial.println(yValue);
+  delay(100);  // Add a small delay to make the output more readable
+}
+
+void moveMotor(){
+  if(xValue < 400){
+    servo1.write(0);
+  }else if(xValue > 600){
+    servo1.write(180);
+  }else{
+    servo1.write(95);
+  }
+}
